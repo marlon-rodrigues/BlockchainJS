@@ -1,4 +1,4 @@
-import * as SHA256 from 'node_modules/crypto-js/sha256';
+const SHA256 = require('./node_modules/crypto-js/sha256');
 
 class Block {
 	constructor(index, timestamp, data, previousHash = '') {
@@ -10,16 +10,16 @@ class Block {
 	}
 
     calculateHash() {
-		return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringfy(this.data)).toString();
+		return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data)).toString();
 	}
 }
 
 class Blockchain {
 	constructor() {
-		this.chain = [this.createFirstBlock()];
+		this.chain = [this.createGenesisBlock()];
 	}
 
-    createFirstBlock() {
+    createGenesisBlock() {
 		return new Block(0, "14/01/2017", "First Block", "0");
 	}
 
@@ -34,7 +34,7 @@ class Blockchain {
 	}
 
 	isChainValid() {
-		for (let i = 0; i < this.chain.length; i++) {
+		for (let i = 1; i < this.chain.length; i++) {
 			const currentBlock = this.chain[i];
 			const previousBlock = this.chain[i - 1];
 
@@ -55,10 +55,13 @@ let theBestCoin = new Blockchain();
 theBestCoin.addBlock(new Block(1, "15/01/2017", { value: 5 }));
 theBestCoin.addBlock(new Block(2, "15/01/2017", { value: 10 }));
 
+// show results
+console.log(JSON.stringify(theBestCoin, null ,4));
+
 // should return true
 console.log(`Is Blockchain valid? ${theBestCoin.isChainValid()}`);
 
-console.log('Change a block');
+console.log('Changing block...');
 theBestCoin.chain[1].data = { value: 50 };
 
 // should return false
