@@ -63,6 +63,7 @@ console.log(`Is Blockchain valid? ${theBestCoin.isChainValid()}`);
 
 console.log('Changing block...');
 theBestCoin.chain[1].data = { value: 50 };
+theBestCoin.chain[1].hash = theBestCoin.chain[1].calculateHash();
 
 // should return false
 console.log(`Is Blockchain valid? ${theBestCoin.isChainValid()}`);
